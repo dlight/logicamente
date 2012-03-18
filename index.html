@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Adicionar Exercícios</title>
+    <link rel="stylesheet" type="text/css" href="base.css" />
+    <script src="jquery-1.7.1.min.js"></script>
+    <script src="query.js"></script>
+  </head>
+  <body>
+    <form>
+      <div class="box">
+	<div class="row">
+	  <h1>Adicionar exercícios</h1>
+	</div>
+
+        <div class="row">
+          <span>Exercícios por aluno</span>
+	  <div class="block">
+            <input type="text" class="num" name="numero" value="0"/> (<span id="num_total">0</span> ao todo)
+	  </div>
+	  <div class="desc">
+	    dfsdf
+	  </div>
+        </div>
+        <div class="row">
+          <span>Átomos</span>
+          <input type="text" class="block" name="atomos"/>
+        </div>
+        <div class="row">
+          <span>Conectivos</span>
+          <input type="text" class="block" name="conectivos"/>
+        </div>
+        <div class="row">
+          <span>Complexidade</span>
+          <input type="text" class="num" name="compl_min"/> à
+          <input type="text" class="num" name="compl_max"/>
+        </div>
+        <div class="row">
+          <span>Restrições</span>
+          <input type="text" class="block" name="restricoes"/>
+        </div>
+        <div class="row">
+          <span>Mensagem aos alunos</span>
+          <textarea class="block" name="mensagem"></textarea>
+        </div>
+
+        <div class="row">
+	  <a class="button" value="Enviar" />
+	</div>
+      </div>
+    </form>
+  </body>
+</html>

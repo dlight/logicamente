@@ -1,0 +1,119 @@
+/* reset */
+* { margin:0; padding:0;}
+
+body {
+    line-height: 1;
+    margin: 0em;
+    font-size: 14px;
+    background-color:#fff;
+    color: #000;
+}
+
+form {
+    display:-moz-inline-stack;
+    display:inline-block;
+    *display:inline;
+
+    background-color:#222222;
+    border-bottom:1px solid #85b1de;
+
+    margin-left: 2em;
+}
+
+
+h1 {
+    font-size: 1.5em;
+    font-weight: normal;
+
+
+    padding-left: 1.5em;
+}
+
+qqh1 { 
+    color:#ffffff;
+    font-size:18px;
+    padding:5px 0 5px 5px;
+
+    border-top:1px solid #85b1de;
+    border-bottom:1px solid #85b1de;
+    margin-left: 5em;
+}
+
+.row {
+    font-size: 1.1em;
+    width:100%;
+    display: block;
+    background-color: #d6e5f4;
+    border-top: solid 1px #85b1de;
+    padding:1.2em 0em;
+}
+
+.row.active {
+    background-color: #DAE8F5;
+}
+
+.row > span {
+    display: block;
+    color:#555;
+    float:left;
+    width: 8em;
+    text-align:right;
+    padding-left: 1em;
+    margin-right: 1em;
+}
+
+input.num {
+    width: 3em;
+}
+
+.block{
+    width: 20em;
+    margin-right: 1em;
+}
+
+input, textarea {
+    padding: 0.2em;
+    background-color: #EDF2F7;
+    border: 1px solid #888;
+    overflow: auto;
+}
+
+input.active, textarea.active {
+    background-color: #fff;
+
+}
+
+input{
+    height: 1.8em;
+}
+
+textarea { height: 7em; }
+
+.button
+{
+    margin:0 0 10px 0;
+    padding:4px 7px;
+    background-color:#CC0000;
+    border:0px;
+
+
+    border-bottom: 1px double #660000;
+    border-top: 1px double #660000;
+    border-left:1px double #FF0033;
+    border-right:1px double #FF0033;
+}
+
+
+.desc {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+
+    width: 20em;
+
+    padding: 10em;
+
+    background-color: cyan;
+
+    display: none;
+}
