@@ -14,7 +14,9 @@ form {
     display:inline-block;
     *display:inline;
 
-    background-color:#222222;
+    max-width: 35%;
+
+    background-color: #d6e5f4;
     border-bottom:1px solid #85b1de;
 
     margin-left: 2em;
@@ -26,56 +28,77 @@ h1 {
     font-weight: normal;
 
 
-    padding-left: 1.5em;
+    padding: 1.2em;
 }
 
-qqh1 { 
-    color:#ffffff;
-    font-size:18px;
-    padding:5px 0 5px 5px;
-
-    border-top:1px solid #85b1de;
-    border-bottom:1px solid #85b1de;
-    margin-left: 5em;
+.box {
+    display: table;
+border-spacing: 0px; border-collapse: collapse;
 }
 
 .row {
     font-size: 1.1em;
     width:100%;
-    display: block;
-    background-color: #d6e5f4;
-    border-top: solid 1px #85b1de;
-    padding:1.2em 0em;
+    display: table-row;
 }
 
 .row.active {
     background-color: #DAE8F5;
 }
 
-.row > span {
+.name {
     display: block;
     color:#555;
-    float:left;
-    width: 8em;
     text-align:right;
-    padding-left: 1em;
-    margin-right: 1em;
+    padding: 1.2em 1.5em 1.2em 0.5em;
+
+    height: 100%;
+    border-top: solid 1px #85b1de;
 }
 
 input.num {
     width: 3em;
+    padding: 0em 0.2em;
 }
 
-.block{
+.cell {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.block {
     width: 20em;
-    margin-right: 1em;
+
+    padding: 1.2em 0em;
+    border-top: solid 1px #85b1de;
+}
+
+.block ul {
+    float: left;
+    list-style-type: none;
+    width: 100%;
+}
+
+.block li {
+    width: 10em;
+    float: left;
+}
+
+
+
+input[type="checkbox"] {
+    vertical-align: middle;
+    margin: 0 0.4em 0 0;
+}
+
+.block br {
+    clear: left;
 }
 
 input, textarea {
-    padding: 0.2em;
+
     background-color: #EDF2F7;
     border: 1px solid #888;
-    overflow: auto;
 }
 
 input.active, textarea.active {
@@ -83,24 +106,20 @@ input.active, textarea.active {
 
 }
 
-input{
-    height: 1.8em;
-}
-
+input { height: 1.8em; }
 textarea { height: 7em; }
 
-.button
+#send
 {
-    margin:0 0 10px 0;
-    padding:4px 7px;
-    background-color:#CC0000;
-    border:0px;
+    padding: 0.3em;
+    background-color:#CCCCCC;
 
 
-    border-bottom: 1px double #660000;
-    border-top: 1px double #660000;
-    border-left:1px double #FF0033;
-    border-right:1px double #FF0033;
+    border: 1px double #666666;
+}
+
+.hover {
+    cursor: pointer;
 }
 
 
@@ -109,11 +128,25 @@ textarea { height: 7em; }
     top: 0px;
     right: 0px;
 
-    width: 20em;
+    max-width: 40%;
 
-    padding: 10em;
+    padding: 1.2em;
+    margin: 0em 2em;
 
-    background-color: cyan;
+    background-color: #F0FFF0;
 
     display: none;
+}
+
+.result {
+    max-width: 40%;
+
+    padding: 1.2em;
+    margin: 0em 2em;
+
+    background-color: #F0FFF0;
+
+    display: none;
+
+    float: right;
 }
