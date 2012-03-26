@@ -101,9 +101,22 @@ function gen($params) {
 	elseif ($con === 'not')
 	    array_push($conectives, new Connective("!","not","N",1,0));
     }
+    /*
+    $atomsin = array();	
+    
+    $atomsin = explode(", ", $params['atoms']);
+	    $atomsin = $params['atoms']; 
+    foreach ( as $atm) {
+	array_push($atomsin );
+    }
+    
+    ????
+    */
+    
+    
+    
 
-
-    $fgenerator = new FormulaGenerator($conectives);
+    $fgenerator = new FormulaGenerator($conectives, $atoms);
 
     $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator) {
 	   return $fgenerator->generateFormula(rand(2, 6), 4)->toInfixNotation(); 
