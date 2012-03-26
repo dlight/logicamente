@@ -1,15 +1,14 @@
 <?php
 class FormulaGenerator {
 	public $connectives = array();
-//	public $atoms = array();
+	public $atoms = array();
 	private $connectives_left;
 	private $root;
-//	public function __construct($connectives, $atoms) {
-	public function __construct($connectives) {		
+	public function __construct($connectives, $atoms) {
 		$this->connectives = $connectives;
-//		$this->atoms = $atoms;
+		$this->atoms = $atoms;
 	}
-//	public function generateFormula($complexity, $symbols, $atoms) {
+
 	public function generateFormula($complexity, $symbols) {		
 		if ($complexity < 0) {
 			return;
@@ -18,8 +17,7 @@ class FormulaGenerator {
 		
 		//Gerar!
 		$this->connectives_left = $complexity;
-		if ($this->connectives_left == 0) $this->root = new Atom("p". rand(0,$symbols-1)); //Any atom
-//		if ($this->connectives_left == 0) $this->root = array_rand($this->atoms,1); //Any atom
+		if ($this->connectives_left == 0) $this->root = $this->atoms[array_rand($this->atoms,1)]; //Any atom
 		else {
 			$this->root = $this->rConnective();
 			$this->connectives_left--;
@@ -29,15 +27,14 @@ class FormulaGenerator {
 	}
 	private function recursiveGenerator(&$root, $symbols) {
 		if ($root instanceof Atom) return;
-		if ($this->connectives_left == 0) { //Nao há mais conectivos para serem adicionados, então, completar com átomos
+		if ($this->connectives_left == 0) { //Nao hÃ¡ mais conectivos para serem adicionados, entÃ£o, completar com Ã¡tomos
 			if ($root instanceof Connective) {
 				for($i = $root->arity - count($root->children); $i > 0; $i--) {
-					$root->children[] = new Atom("p". rand(0,$symbols-1));
-//					$root->children[] = array_rand($this->atoms,1);				
+					$root->children[] = $this->atoms[array_rand($this->atoms,1)];			
 				}
 			}
 		}
-		else { //Nao é atomo, e ainda temos conectivos para adicionar
+		else { //Nao Ã© atomo, e ainda temos conectivos para adicionar
 			if ($this->connectives_left > $root->arity) $min = $root->arity;
 			else $min = $this->connectives_left;
 			$connectives_to_add = rand(1,$min); //Calculando o numero de conectivos que serao adicionados ao conectivo atual nessa chamada
@@ -49,8 +46,7 @@ class FormulaGenerator {
 			}
 
 			for($i = count($root->children); $i < $root->arity; $i++) { //Completando o conectivo atual com atomos
-				$root->children[] = new Atom("p". rand(0,$symbols-1));
-//				$root->children[] = array_rand($this->atoms,1);		
+				$root->children[] = $this->atoms[array_rand($this->atoms,1)];	
 			}
 			
 			shuffle($root->children); //Elarmhabando
