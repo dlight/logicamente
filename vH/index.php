@@ -9,6 +9,7 @@ body{font-family:"Consolas",Times,serif;font-size:13}
 <body>
 <?php
 
+
 require_once 'Atom.php';
 require_once 'Node.php';
 require_once 'Connective.php';
@@ -43,7 +44,7 @@ $max_symbols = 6;
 	
 for ($i = 0; $i < $numero_formulas; $i++) {
 	echo "<br/>";
-	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max),rand($min_symbols,$max_symbols));
+	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max));
 	echo $formula->toInfixNotation();
 }
 
@@ -76,13 +77,10 @@ $numero_formulas = 20;
 $complexity_min = 25;
 $complexity_max = 30;
 
-$min_symbols = 3;
-$max_symbols = 6;
-	
 
 for ($i = 0; $i < $numero_formulas; $i++) {
 	echo "<br/>";
-	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max),rand($min_symbols,$max_symbols));
+	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max));
 	echo $formula->toInfixNotation();
 }
 
@@ -110,12 +108,11 @@ $numero_formulas = 20;
 $complexity_min = 4;
 $complexity_max = 4;
 
-$min_symbols = 3;
-$max_symbols = 6;
+
 	
 for ($i = 0; $i < $numero_formulas; $i++) {
 	echo "<br/>";
-	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max),rand($min_symbols,$max_symbols));
+	$formula = $fgenerator->generateFormula(rand($complexity_min,$complexity_max));
 	echo $formula->toInfixNotation();
 }
 
@@ -124,5 +121,8 @@ for ($i = 0; $i < $numero_formulas; $i++) {
 
 
 
+
 </body>
 </html>
+
+
