@@ -16,9 +16,24 @@ function sat($formula) {
 }
 
 function follows($premises, $conclusion) {
-    $s = implode('&', $premises) . '&!' . $conclusion;
+	
+    $s = implode(' & ', $premises) . ' &! ' . $conclusion;
     return ! sat($s);
 }
+
+
+function contingency($formula) {
+    return (boolean) sat($formula) && (! valid($formula));
+ }
+
+
+function valid($formula) {
+    $formula = escapeshellarg($formula);
+    $output = `echo $formula | ./limboole`;
+    return preg_match('/^% VALID/', $output) >= 1; 
+}
+
+
 
 function superfluous($p, $premises, $conclusion) {
     $premises_without_p = array_filter($premises, function ($q) use ($p) {
@@ -83,9 +98,9 @@ function gen($params) {
     $num_valid = $cutoff;
     $num_invalid = $total - $cutoff;
 
-    $compl_min = intval($params['compl_min']);
-    $compl_max = intval($params['compl_max']);
-    $num_premises = intval($params['num_premises']);
+      
+    $num_premises = $params['num_premises'];
+
 
     $conectives = array();
 
@@ -101,27 +116,41 @@ function gen($params) {
 	elseif ($con === 'not')
 	    array_push($conectives, new Connective("!","not","N",1,0));
     }
-    /*
-    $atomsin = array();	
-    
-    $atomsin = explode(", ", $params['atoms']);
-	    $atomsin = $params['atoms']; 
-    foreach ( as $atm) {
-	array_push($atomsin );
-    }
-    
-    ????
-    */
-    
-    
-    
+	
 
+
+
+	$atoms = array();
+		
+	foreach ($params['atoms'] as $atm) {
+		array_push($atoms, new Atom($atm));
+	}
+	
     $fgenerator = new FormulaGenerator($conectives, $atoms);
+	
+	$compl_min = intval($params['compl_min']);
+	$compl_min = intval($params['compl_max']);
 
-    $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator) {
-	   return $fgenerator->generateFormula(rand(2, 6), 4)->toInfixNotation(); 
+    
+
+    $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator, $compl_min, $compl_max) {
+	   $complex = rand($compl_min, $compl_max);
+	   $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
+	   
+	   /*
+	   $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
+	   $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
+       */    
+
+	   
+	   while (contingency($formula) !=  1):
+			$formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
+	   endwhile;
+	      
+	   return $formula; 
 	});
-
+	
+	
     $exercises['num_valid'] = count($exercises['valid']);
     $exercises['num_invalid'] = count($exercises['invalid']);
     $exercises['num_total'] = $exercises['num_valid'] + $exercises['num_invalid'];
@@ -137,6 +166,19 @@ follows(array('a', 'b', 'c'), 'a');
 
 $x = superfluous('c', array('a', 'b', 'c'), '(c|b)');
 
+/*
+echo '<br/><br/>';
+
+print 'Contingencia: '. ((bool) (contingency('(c -> c)')));
+
+
+echo '<br/><br/>';
+
+echo  'Validade: '. ((bool)  ( valid('(c -> c)')));
+
+ 
+echo '<br/><br/>';
+*/
 
 $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);
