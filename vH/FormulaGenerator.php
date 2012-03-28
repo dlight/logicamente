@@ -2,14 +2,14 @@
 class FormulaGenerator {
 	public $connectives = array();
 	public $atoms = array();
-	private $connectives_left;
+	private $connectives_left = int;
 	private $root;
 	public function __construct($connectives, $atoms) {
 		$this->connectives = $connectives;
 		$this->atoms = $atoms;
 	}
 
-	public function generateFormula($complexity, $symbols) {		
+	public function generateFormula($complexity) {		
 		if ($complexity < 0) {
 			return;
 			//erro aqui ;P
@@ -21,11 +21,12 @@ class FormulaGenerator {
 		else {
 			$this->root = $this->rConnective();
 			$this->connectives_left--;
-			$this->recursiveGenerator($this->root, $symbols);
+			$this->recursiveGenerator($this->root);
 		}
+		
 		return new Formula($this->root);
 	}
-	private function recursiveGenerator(&$root, $symbols) {
+	private function recursiveGenerator(&$root) {
 		if ($root instanceof Atom) return;
 		if ($this->connectives_left == 0) { //Nao há mais conectivos para serem adicionados, então, completar com átomos
 			if ($root instanceof Connective) {
@@ -52,7 +53,7 @@ class FormulaGenerator {
 			shuffle($root->children); //Elarmhabando
 			
 			foreach($root->children as $child) {
-				$this->recursiveGenerator($child, $symbols);
+				$this->recursiveGenerator($child);
 			}
 		}
 		
