@@ -18,12 +18,12 @@ function read_atoms(name) {
 
 function form_value() {
     return {
-	num_exercises: read_num('num_exercises') * 47,
-	num_students: 47,
+	num_exercises: read_num('num_exercises') * 1,
+	num_students: 1,
 	atoms: read_atoms('atoms'),
 	compl_min: read_num('compl_min'),
 	compl_max: read_num('compl_max'),
-	num_premises: read_num('compl_min'),
+	num_premises: read_num('num_premises'),
 	//message: $("input[textarea=message]"),
 	conectives: checked('conectives'),
 	restrictions: checked('restrictions')
@@ -33,13 +33,13 @@ function form_value() {
 var test;
 
 $(document).ready(function () {
-    /* $('input,textarea').bind('focus blur', function (ev) {
+     $('input,textarea').bind('focus blur', function (ev) {
 	var s = $(this);
 	var p = s.parents('.row');
 	s.toggleClass('active');
 	p.toggleClass('active');
 	p.children('.desc').toggle();
-     }); */
+     }); 
 
     $("a#send").hover(function (ev) {
 	$(this).toggleClass('hover');
@@ -55,7 +55,7 @@ $(document).ready(function () {
 	    dataType: "json",
 	    data: JSON.stringify(form_value()),
 	    error: function(obj, status) {
-		alert("Erro ao enviar os dados: " + status);
+			alert("Erro ao enviar os dados: " + status);
 	    },
 	    success: function(data) {
 		console.log($('#results'));
@@ -70,6 +70,6 @@ $(document).ready(function () {
     $('input[name=num_exercises]').bind('blur', function (ev) {
 	var v = $(this).val() || 0;
 	$(this).val(v);
-	$('span#num_total').text($(this).val() * 47);
+	$('span#num_total').text($(this).val() * 1);
     });
 });
