@@ -45,7 +45,7 @@ function relevant($premises, $conclusion) {
 			$numRelevPrems++;
 		}
 	}
-	$output = shell_exec("echo 'Num de Premissas ". sizeof($premises) ."\n' >> log");
+
 	if ($numRelevPrems < sizeof($premises)) {
 		return false;
 	} else {
