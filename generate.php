@@ -146,13 +146,16 @@ function gen($params) {
     $total = intval($params['num_exercises']);
 
     $cutoff = rand(0, $total);
-    $no_superfluous = false;
+    $no_superfluous_premises_allowed = false;
+    $must_be_relevant = false;
 
     foreach ($params['restrictions'] as $restr) {
         if ($restr === 'same_proportion')
             $cutoff = floor($total / 2);
-        elseif ($restr === 'no_superfluous_premises')
-            $no_superfluous = true;
+        elseif ($restr === 'no_superfluous_premises_allowed')
+            $no_superfluous_premises_allowed = true;
+        elseif ($restr === 'must_be_relevant')
+            $must_be_relevant = true;
     }
 
     $num_valid = $cutoff;
@@ -192,13 +195,11 @@ function gen($params) {
 
     return generate_exercises(
         $num_valid, $num_invalid, $num_premises,
-        function ($exercise) use($no_superfluous) {
-            //die('Debug: ' . var_dump(has_superfluous_premises($exercise)));
-
-            if ($no_superfluous && has_superfluous_premises($exercise))
+        function ($exercise) use($no_superfluous, $must_be_relevant) {
+            if ($no_superfluous_premises_allowed && has_superfluous_premises($exercise))
                 return false;
 
-            if (!relevant($exercise['premises'], $exercise['conclusion']))
+            if ($must_be_relevant && !relevant($exercise['premises'], $exercise['conclusion']))
                 return false;
 
             return true;
