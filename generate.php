@@ -16,17 +16,6 @@ function sat($formula) {
 }
 
 function follows($premises, $conclusion) {
-	/*
-	 *
-	 * foreach ($params['atoms'] as $atm) {
-		array_push($atoms, new Atom($atm));
-	} 
-	 * 
-	*/
-	foreach ($premises as $atm => $p) {
-		//$output = shell_exec("echo 'Premissa: ". $key ." - ". $atm ."\n' >> log");
-		$output = shell_exec("echo 'Premissa: ". $p."\nIndex: ".$atm."\n' >> log");
-	}
     $s = implode(' & ', $premises) . ' &! ' . $conclusion;
     return ! sat($s);
 }
@@ -34,20 +23,30 @@ function follows($premises, $conclusion) {
 function relevant($premises, $conclusion) {
 	$premise_atoms = array();
 	$conclusion_atoms = array();
-	$count=0;
+	$numRelevPrems=0;
 	$pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
 	
-	preg_match_all($pattern, $conclusion, $conclusion_atoms);
-	foreach ($premises as $key => $p ) {
-		preg_match_all($pattern, $p, $premise_atoms);
+	preg_match_all($pattern, $conclusion, $conclusion_atoms); 
+
+	
+	foreach ($premises as $key => $premise ) {
+		$isRelevant=false;
 		
-		foreach ($premise_atoms as $p_atom) {
-			if (in_array($p_atom, $conclusion_atoms)) {
-				$count++;
-			}
+		preg_match_all($pattern, $premise, $premise_atoms); 
+		
+		foreach ($premise_atoms[0] as $k => $p_atoms) { 
+			
+			if (in_array($p_atoms, $conclusion_atoms[0])) {
+				$isRelevant=true;
+			}	
+		}
+		
+		if ( $isRelevant == true){
+			$numRelevPrems++;
 		}
 	}
-	if ($count < sizeof($premises)) {
+	$output = shell_exec("echo 'Num de Premissas ". sizeof($premises) ."\n' >> log");
+	if ($numRelevPrems < sizeof($premises)) {
 		return false;
 	} else {
 		return true;
@@ -102,11 +101,11 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $new_formul
 
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
 	$exercise = new_exercise($num_premises, $new_formula);
-	/*
+
 	while (!relevant($exercise['premises'], $exercise['conclusion'])) {
 		$exercise = new_exercise($num_premises, $new_formula);
 	}
-	*/
+
 	if (follows($exercise['premises'], $exercise['conclusion']))
 	    if(count($valid) < $num_valid) array_push($valid, $exercise);
 	    else array_push($discarded_valid, $exercise);
@@ -155,8 +154,6 @@ function gen($params) {
     }
 	
 
-
-
 	$atoms = array();
 		
 	foreach ($params['atoms'] as $atm) {
@@ -174,11 +171,6 @@ function gen($params) {
 	   $complex = rand($compl_min, $compl_max);
 	   $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
 	   
-	   /*
-	   $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
-	   $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
-       */    
-
 	   
 	   while (contingency($formula) !=  1):
 			$formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
@@ -198,12 +190,13 @@ function gen($params) {
 
     return $exercises;
 }
+
 /*
 follows(array('a', 'b', 'c'), 'a');
 
 $x = superfluous('c', array('a', 'b', 'c'), '(c|b)');
-*/
-/*
+
+
 echo '<br/><br/>';
 
 print 'Contingencia: '. ((bool) (contingency('(c -> c)')));
@@ -215,7 +208,36 @@ echo  'Validade: '. ((bool)  ( valid('(c -> c)')));
 
  
 echo '<br/><br/>';
+
+
+
+echo 'Contingencia: '. ((bool) (contingency('(c -> c)'))));
+
+
+
+echo '<br/><br/>';
+
+$premises = array();
+
+$f1 =  "A /\ A";
+$f2 =  "D -> C";
+$f3 =  "E -> B";
+$f4 =  "E -> A";
+$c0 =  "D -> (B /\ A)";
+
+array_push($premises, $f1);
+array_push($premises, $f2);
+array_push($premises, $f3);
+array_push($premises, $f4);
+
+echo '<br/><br/>';
+
+echo relevant($premises, $c0);
+
+
+echo '<br/><br/>';
 */
+
 
 $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);
