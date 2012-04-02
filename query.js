@@ -161,7 +161,8 @@ $(document).ready(function () {
     });
 
     $("a#send").click(function (ev) {
-        $('a#send a#salvar').hide();
+        $('a#send').toggle();
+	$('a#salvar').hide();
 
         $.ajax({
             url:"generate.php",
@@ -178,7 +179,9 @@ $(document).ready(function () {
 
 		test = data;
 
-                $('a#send a#salvar #menu').show();
+                $('a#send').toggle();
+                $('#menu').show();
+                $('a#salvar').show();
 		
                 $('#menu #exerc').trigger('click');
             }
