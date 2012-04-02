@@ -1,6 +1,5 @@
 <?php
 
-
 require_once 'vH/Atom.php';
 require_once 'vH/Node.php';
 require_once 'vH/Connective.php';
@@ -213,7 +212,13 @@ $decoded = json_decode($jsonInput,true);
 $json = array();
 $json['request'] = $decoded;
 
+$time_a = microtime(true);
+
 $json['exercises'] = gen($decoded);
+
+$time_b = microtime(true);
+
+$json['time'] = array('total' => $time_b - $time_a);
 
 die(json_encode($json));
 
