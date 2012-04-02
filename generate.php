@@ -21,32 +21,32 @@ function follows($premises, $conclusion) {
 }
 
 function relevant($premises, $conclusion) {
-	$premise_atoms = array();
-	$conclusion_atoms = array();
-	$count=0;
-	$pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
-	
-	preg_match_all($pattern, $conclusion, $conclusion_atoms);
-	foreach ($premises as $key => $p ) {
-		preg_match_all($pattern, $p, $premise_atoms);
-		
-		foreach ($premise_atoms as $p_atom) {
-			if (in_array($p_atom, $conclusion_atoms)) {
-				$count++;
-			}
-		}
-	}
-	if ($count < sizeof($premises)) {
-		return false;
-	} else {
-		return true;
-	}
+    $premise_atoms = array();
+    $conclusion_atoms = array();
+    $count=0;
+    $pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
+
+    preg_match_all($pattern, $conclusion, $conclusion_atoms);
+    foreach ($premises as $key => $p ) {
+        preg_match_all($pattern, $p, $premise_atoms);
+
+        foreach ($premise_atoms as $p_atom) {
+            if (in_array($p_atom, $conclusion_atoms)) {
+                $count++;
+            }
+        }
+    }
+    if ($count < sizeof($premises)) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 
 function contingency($formula) {
     return (boolean) sat($formula) && (! valid($formula));
- }
+}
 
 
 function valid($formula) {
@@ -59,16 +59,16 @@ function valid($formula) {
 
 function superfluous($p, $premises, $conclusion) {
     $premises_without_p = array_filter($premises, function ($q) use ($p) {
-	    return $q !== $p;
-	});
+            return $q !== $p;
+        });
 
     return follows($premises_without_p, $conclusion);
 }
 
 function has_superfluous_premises($premises, $conclusion) {
     foreach($premises as $p)
-	if (superfluous($p, $premises, $conclusion))
-	    return true;
+        if (superfluous($p, $premises, $conclusion))
+            return true;
 
     return false;
 }
@@ -76,7 +76,7 @@ function has_superfluous_premises($premises, $conclusion) {
 function new_exercise($num_premises, $new_formula) {
     $exercise['premises'] = array();
     for ($i = 0; $i < $num_premises; $i++)
-	array_push($exercise['premises'], $new_formula());
+        array_push($exercise['premises'], $new_formula());
 
     $exercise['conclusion'] = $new_formula();
 
@@ -90,22 +90,22 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $new_formul
     $discarded_invalid = array();
 
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
-	$exercise = new_exercise($num_premises, $new_formula);
-	/*
-	while (!relevant($exercise['premises'], $exercise['conclusion'])) {
-		$exercise = new_exercise($num_premises, $new_formula);
-	}
-	*/
-	if (follows($exercise['premises'], $exercise['conclusion']))
-	    if(count($valid) < $num_valid) array_push($valid, $exercise);
-	    else array_push($discarded_valid, $exercise);
-	else
-	    if(count($invalid) < $num_invalid) array_push($invalid, $exercise);
-	    else array_push($discarded_invalid, $exercise);
+        $exercise = new_exercise($num_premises, $new_formula);
+/*
+  while (!relevant($exercise['premises'], $exercise['conclusion'])) {
+  $exercise = new_exercise($num_premises, $new_formula);
+  }
+*/
+        if (follows($exercise['premises'], $exercise['conclusion']))
+            if(count($valid) < $num_valid) array_push($valid, $exercise);
+            else array_push($discarded_valid, $exercise);
+        else
+            if(count($invalid) < $num_invalid) array_push($invalid, $exercise);
+            else array_push($discarded_invalid, $exercise);
     }
 
     return array('valid' => $valid, 'invalid' => $invalid, 'discarded_valid' =>
-		 $discarded_valid, 'discarded_invalid' => $discarded_invalid);
+                 $discarded_valid, 'discarded_invalid' => $discarded_invalid);
 }
 
 function gen($params) {
@@ -115,68 +115,68 @@ function gen($params) {
     $no_superfluous = false;
 
     foreach ($params['restrictions'] as $restr) {
-	if ($restr === 'same_proportion')
-	    $cutoff = floor($total / 2);
-	elseif ($restr === 'no_superfluous_premises')
-	    $no_superfluous = true;
+        if ($restr === 'same_proportion')
+            $cutoff = floor($total / 2);
+        elseif ($restr === 'no_superfluous_premises')
+            $no_superfluous = true;
     }
 
     $num_valid = $cutoff;
     $num_invalid = $total - $cutoff;
 
-      
+
     $num_premises = $params['num_premises'];
 
 
     $conectives = array();
 
     foreach ($params['conectives'] as $con) {
-	if ($con === 'and')
-	    array_push($conectives, new Connective("&","and","K",2,0));
-	elseif ($con === 'or')
-	    array_push($conectives, new Connective("|","or","A",2,0));
-	elseif ($con === 'imp')
-	    array_push($conectives, new Connective("->","imp","C",2,0));
-	elseif ($con === 'biimp')
-	    array_push($conectives, new Connective("<->","biimp","B",2,0));
-	elseif ($con === 'not')
-	    array_push($conectives, new Connective("!","not","N",1,0));
+        if ($con === 'and')
+            array_push($conectives, new Connective("&","and","K",2,0));
+        elseif ($con === 'or')
+            array_push($conectives, new Connective("|","or","A",2,0));
+        elseif ($con === 'imp')
+            array_push($conectives, new Connective("->","imp","C",2,0));
+        elseif ($con === 'biimp')
+            array_push($conectives, new Connective("<->","biimp","B",2,0));
+        elseif ($con === 'not')
+            array_push($conectives, new Connective("!","not","N",1,0));
     }
-	
 
 
 
-	$atoms = array();
-		
-	foreach ($params['atoms'] as $atm) {
-		array_push($atoms, new Atom($atm));
-	}
-	
+
+    $atoms = array();
+
+    foreach ($params['atoms'] as $atm) {
+        array_push($atoms, new Atom($atm));
+    }
+
     $fgenerator = new FormulaGenerator($conectives, $atoms);
-	
-	$compl_min = intval($params['compl_min']);
-	$compl_min = intval($params['compl_max']);
 
-    
+    $compl_min = intval($params['compl_min']);
+    $compl_min = intval($params['compl_max']);
+
+
 
     $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator, $compl_min, $compl_max) {
-	   $complex = rand($compl_min, $compl_max);
-	   $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
-	   
-	   /*
-	   $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
-	   $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
-       */    
+            $complex = rand($compl_min, $compl_max);
+            $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
 
-	   
-	   while (contingency($formula) !=  1):
-			$formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
-	   endwhile;
-	      
-	   return $formula; 
-	});
-	
-	
+/*
+  $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
+  $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
+*/    
+
+
+            while (contingency($formula) !=  1):
+                $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
+            endwhile;
+
+            return $formula; 
+        });
+
+
     $exercises['num_valid'] = count($exercises['valid']);
     $exercises['num_invalid'] = count($exercises['invalid']);
     $exercises['num_total'] = $exercises['num_valid'] + $exercises['num_invalid'];
@@ -194,12 +194,12 @@ $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);
 $decoded = json_decode($jsonInput,true);
 
- 
+
 $json = array();
 $json['request'] = $decoded;
 
 $json['exercises'] = gen($decoded);
 
 die(json_encode($json));
- 
+
 ?>

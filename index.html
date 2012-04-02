@@ -14,121 +14,121 @@
       <div class="box">
         <div class="row">
           <div class="cell"><div class="name">Exercícios por aluno</div></div>
-	  <div class="cell">
-	    <div class="block">
+          <div class="cell">
+            <div class="block">
               <input type="text" class="num" name="num_exercises" value="0"/> (<span id="num_total">0</span> ao todo)
-	    </div>
-	    <div class="desc">
-	      <p>Quantos exercícios cada aluno vai receber. A turma possui 47 alunos.</p>
-	    </div>
-	  </div>
+            </div>
+            <div class="desc">
+              <p>Quantos exercícios cada aluno vai receber. A turma possui 47 alunos.</p>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="cell"><div class="name">Átomos</div></div>
-	    <div class="cell">
-	      <div class="block">
-		<input type="text" name="atoms" value="A, B, C, D" />
-	      </div>
-	    </div>
-
-	    <div class="desc">
-	      <p>Uma lista de proposições atômicas à serem utilizadas, separadas por vírgulas.</p>
-	    </div>
+          <div class="cell">
+            <div class="block">
+              <input type="text" name="atoms" value="A, B, C, D" />
+            </div>
           </div>
+
+          <div class="desc">
+            <p>Uma lista de proposições atômicas à serem utilizadas, separadas por vírgulas.</p>
+          </div>
+        </div>
         <div class="row">
           <div class="cell"><div class="name">Conectivos</div></div>
-	  <div class="cell">
-	    <div class="block">
-	      <ul>
-		<li><label><input type="checkbox" name="conectives" value="bottom" checked />Bottom</label></li>
-		<li><label><input type="checkbox" name="conectives" value="top" checked />Top</label></li>
-		<li><label><input type="checkbox" name="conectives" value="not" checked />Negação</label></li>
-		<li><label><input type="checkbox" name="conectives" value="or" checked />Disjunção</label></li>
-	      </ul>
-	      <ul>
-		<li><label><input type="checkbox" name="conectives" value="and" checked />Conjunção</label></li>
-		<li><label><input type="checkbox" name="conectives" value="imp" checked />Implicação</label></li>
-		<li><label><input type="checkbox" name="conectives" value="biimp" checked />Bi-implicação</label></li>
-	      </ul>
-	      <br />
-	      
-	    </div>
-	  </div>
-	  <div class="desc">
-	    <p>Quais conectivos incluir em cada fórmula.</p>
-	  </div>
+          <div class="cell">
+            <div class="block">
+              <ul>
+                <li><label><input type="checkbox" name="conectives" value="bottom" checked />Bottom</label></li>
+                <li><label><input type="checkbox" name="conectives" value="top" checked />Top</label></li>
+                <li><label><input type="checkbox" name="conectives" value="not" checked />Negação</label></li>
+                <li><label><input type="checkbox" name="conectives" value="or" checked />Disjunção</label></li>
+              </ul>
+              <ul>
+                <li><label><input type="checkbox" name="conectives" value="and" checked />Conjunção</label></li>
+                <li><label><input type="checkbox" name="conectives" value="imp" checked />Implicação</label></li>
+                <li><label><input type="checkbox" name="conectives" value="biimp" checked />Bi-implicação</label></li>
+              </ul>
+              <br />
+
+            </div>
+          </div>
+          <div class="desc">
+            <p>Quais conectivos incluir em cada fórmula.</p>
+          </div>
         </div>
         <div class="row">
           <div class="cell"><div class="name">Complexidade</div></div>
-	  <div class="cell">
-	    <div class="block">
+          <div class="cell">
+            <div class="block">
 
               <input type="text" class="num" name="compl_min" value="2" /> à
               <input type="text" class="num" name="compl_max" value="6" />
 
-	      <div class="desc">
-		<p>Número de operadores em cada fórmula, variando de um valor mínimo à um valor máximo.</p>
-	      </div>
+              <div class="desc">
+                <p>Número de operadores em cada fórmula, variando de um valor mínimo à um valor máximo.</p>
+              </div>
             </div>
-	  </div>
-	</div>
+          </div>
+        </div>
         <div class="row">
           <div class="cell"><div class="name">Número de premissas</div></div>
-	  <div class="cell">
-	    <div class="block">
+          <div class="cell">
+            <div class="block">
               <input type="text" class="num" name="num_premises" value="3" />
 
-	      <div class="desc">
-		<p>Número de premissas em cada exercício.</p>
-	      </div>
+              <div class="desc">
+                <p>Número de premissas em cada exercício.</p>
+              </div>
             </div>
-	  </div>
-	</div>
+          </div>
+        </div>
         <div class="row">
           <div class="cell"><div class="name">Restrições</div></div>
-	  <div class="cell">
-	    <div class="block">
-	      <ul>
-		<li  class="col1">
-		  <label><input type="checkbox" name="restrictions" value="same_proportion" checked />Igual proporção</label>
-		</li>
-		<li  class="col2">
-		  <label><input type="checkbox" name="restrictions" value="no_superfluous_premises" checked />Sem premissas desnecessárias</label>
-		</li>
-	      </ul>
+          <div class="cell">
+            <div class="block">
+              <ul>
+                <li  class="col1">
+                  <label><input type="checkbox" name="restrictions" value="same_proportion" checked />Igual proporção</label>
+                </li>
+                <li  class="col2">
+                  <label><input type="checkbox" name="restrictions" value="no_superfluous_premises" checked />Sem premissas desnecessárias</label>
+                </li>
+              </ul>
 
-	      <br />
-	    </div>
-	    <div class="desc">
-	      <p>Restrições adicionais aos exercícios gerados.</p>
-	    </div>
-	  </div>
-	</div>
-	<!--
-        <div class="row">
-
-
-          <div class="cell"><div class="name">Mensagem aos alunos</div></div>
-	  <div class="cell">
-	    <div class="block">
-              <textarea class="block" name="message"></textarea>
-	      <div class="desc">
-		<p>Mensagem a enviada mostrada aos alunos. (Opcional)</p>
-	      </div>
+              <br />
             </div>
-	  </div>
-	</div>
-	-->
+            <div class="desc">
+              <p>Restrições adicionais aos exercícios gerados.</p>
+            </div>
+          </div>
+        </div>
+        <!--
+            <div class="row">
+
+
+              <div class="cell"><div class="name">Mensagem aos alunos</div></div>
+              <div class="cell">
+                <div class="block">
+                  <textarea class="block" name="message"></textarea>
+                  <div class="desc">
+                    <p>Mensagem a enviada mostrada aos alunos. (Opcional)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            -->
         <div class="row">
-	  <div class="cell"><div class="name"></div></div>
-	  <div class="cell"><div class="block"><a id="send">Enviar</a></div></div>
-	</div>
+          <div class="cell"><div class="name"></div></div>
+          <div class="cell"><div class="block"><a id="send">Enviar</a></div></div>
+        </div>
       </div>
     </form>
     <div id="results" class="result">
       <div id="tabs"></div>
       <div id="
 
-</div>
+               </div>
   </body>
 </html>

@@ -33,7 +33,7 @@ h1 {
 
 .box {
     display: table;
-border-spacing: 0px; border-collapse: collapse;
+    border-spacing: 0px; border-collapse: collapse;
 }
 
 .row {
