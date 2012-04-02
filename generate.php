@@ -80,32 +80,54 @@ function new_exercise($num_premises, $new_formula) {
 
     $exercise['conclusion'] = $new_formula();
 
+    $exercise['is_valid'] = follows($exercise['premises'], $exercise['conclusion']);
+
     return $exercise;
 }
 
-function generate_exercises($num_valid, $num_invalid, $num_premises, $new_formula) {
+function generate_exercises($num_valid, $num_invalid, $num_premises, $exercise_is_not_fit, $new_formula) {
     $valid = array();
     $invalid = array();
     $discarded_valid = array();
     $discarded_invalid = array();
 
+    $discarded_not_fit = array();
+
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
         $exercise = new_exercise($num_premises, $new_formula);
-/*
-  while (!relevant($exercise['premises'], $exercise['conclusion'])) {
-  $exercise = new_exercise($num_premises, $new_formula);
-  }
-*/
-        if (follows($exercise['premises'], $exercise['conclusion']))
+
+        while ($exercise_is_not_fit($exercise)) {
+            array_push($discarded_not_fit, $exercise);
+            $exercise = new_exercise($num_premises, $new_formula);
+        }
+
+        if ($exercise['is_valid']) {
             if(count($valid) < $num_valid) array_push($valid, $exercise);
             else array_push($discarded_valid, $exercise);
-        else
+        }
+        else {
             if(count($invalid) < $num_invalid) array_push($invalid, $exercise);
             else array_push($discarded_invalid, $exercise);
+        }
     }
 
-    return array('valid' => $valid, 'invalid' => $invalid, 'discarded_valid' =>
-                 $discarded_valid, 'discarded_invalid' => $discarded_invalid);
+    $res = array('valid' => $valid,
+                 'invalid' => $invalid,
+                 'discarded_valid' => $discarded_valid,
+                 'discarded_invalid' => $discarded_invalid,
+                 'discarded_not_fit' => $discarded_not_fit,
+                 'num_gen_valid' => count($valid),
+                 'num_gen_invalid' => count($invalid),
+                 'num_discarded_valid' => count($discarded_valid),
+                 'num_discarded_invalid' => count($discarded_invalid),
+                 'num_discarded_not_fit' => count($discarded_not_fit),
+                 'num_req_valid' => $num_valid,
+                 'num_req_invalid' => $num_invalid);
+
+    $res['num_gen'] = $res['num_gen_valid'] + $res['num_gen_invalid'];
+    $res['num_discarded'] = $res['num_discarded_valid'] + $res['num_discarded_invalid'] + $res['num_discarded_not_fit'];
+    $res['num_req'] = $res['num_req_valid'] + $res['num_req_invalid'];
+    return $res;
 }
 
 function gen($params) {
@@ -143,9 +165,6 @@ function gen($params) {
             array_push($conectives, new Connective("!","not","N",1,0));
     }
 
-
-
-
     $atoms = array();
 
     foreach ($params['atoms'] as $atm) {
@@ -159,15 +178,14 @@ function gen($params) {
 
 
 
-    $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator, $compl_min, $compl_max) {
+    return generate_exercises(
+        $num_valid, $num_invalid, $num_premises,
+        function ($exercise) {
+            return false;
+        },
+        function () use ($fgenerator, $compl_min, $compl_max) {
             $complex = rand($compl_min, $compl_max);
             $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
-
-/*
-  $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
-  $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
-*/    
-
 
             while (contingency($formula) !=  1):
                 $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
@@ -175,17 +193,6 @@ function gen($params) {
 
             return $formula; 
         });
-
-
-    $exercises['num_valid'] = count($exercises['valid']);
-    $exercises['num_invalid'] = count($exercises['invalid']);
-    $exercises['num_total'] = $exercises['num_valid'] + $exercises['num_invalid'];
-
-    $exercises['req_valid'] = $num_valid;
-    $exercises['req_invalid'] = $num_invalid;
-    $exercises['req_total'] = $num_valid + $num_invalid;
-
-    return $exercises;
 }
 
 set_time_limit(0);
