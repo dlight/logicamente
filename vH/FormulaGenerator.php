@@ -2,7 +2,7 @@
 class FormulaGenerator {
 	public $connectives = array();
 	public $atoms = array();
-	private $connectives_left = int;
+	private $connectives_left = 0;
 	private $root;
 	public function __construct($connectives, $atoms) {
 		$this->connectives = $connectives;

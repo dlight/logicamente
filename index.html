@@ -89,14 +89,17 @@
           <div class="cell">
             <div class="block">
               <ul>
-                <li  class="col1">
+                <li>
                   <label><input type="checkbox" name="restrictions" value="same_proportion" checked />Igual proporção</label>
                 </li>
-                <li  class="col1">
+                <li>
                   <label><input type="checkbox" name="restrictions" value="must_be_relevant" checked />Premissas relevantes</label>
                 </li>
-                <li  class="col2">
+                <li>
                   <label><input type="checkbox" name="restrictions" value="no_superfluous_premises_allowed" checked />Sem premissas desnecessárias</label>
+                </li>
+                <li>
+                  <label><input type="checkbox" name="restrictions" value="premise_conjunction_must_be_contingent" checked />Conjunção das premissas é contingente</label>
                 </li>
               </ul>
 
@@ -107,31 +110,12 @@
             </div>
           </div>
         </div>
-        <!--
-            <div class="row">
-
-
-              <div class="cell"><div class="name">Mensagem aos alunos</div></div>
-              <div class="cell">
-                <div class="block">
-                  <textarea class="block" name="message"></textarea>
-                  <div class="desc">
-                    <p>Mensagem a enviada mostrada aos alunos. (Opcional)</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            -->
         <div class="row">
           <div class="cell"><div class="name"></div></div>
           <div class="cell"><div class="block"><a id="send">Enviar</a></div></div>
         </div>
       </div>
     </form>
-    <div id="results" class="result">
-      <div id="tabs"></div>
-      <div id="
-
-               </div>
+    <div id="results" class="result"></div>
   </body>
 </html>

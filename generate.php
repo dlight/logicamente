@@ -52,19 +52,20 @@ function relevant($premises, $conclusion) {
 	}
 }
 
-
-function contingency($formula) {
-    return (boolean) sat($formula) && (! valid($formula));
-}
-
-
 function valid($formula) {
     $formula = escapeshellarg($formula);
     $output = `echo $formula | ./limboole`;
     return preg_match('/^% VALID/', $output) >= 1; 
 }
 
+function contingency($formula) {
+    return (boolean) sat($formula) && (! valid($formula));
+}
 
+function list_contingency($formulas) {
+    $s = implode('&', $formulas);
+    return contingency($s);
+}
 
 function superfluous($p, $premises, $conclusion) {
     $premises_without_p = array_filter($premises, function ($q) use ($p) {
@@ -148,6 +149,7 @@ function gen($params) {
     $cutoff = rand(0, $total);
     $no_superfluous_premises_allowed = false;
     $must_be_relevant = false;
+    $premise_conjunction_must_be_contingent = false;
 
     foreach ($params['restrictions'] as $restr) {
         if ($restr === 'same_proportion')
@@ -156,6 +158,10 @@ function gen($params) {
             $no_superfluous_premises_allowed = true;
         elseif ($restr === 'must_be_relevant')
             $must_be_relevant = true;
+
+        elseif ($restr === 'premises_conjunction_must_be_contingent')
+            $premise_conjunction_must_be_contingent = true;
+
     }
 
     $num_valid = $cutoff;
@@ -195,11 +201,14 @@ function gen($params) {
 
     return generate_exercises(
         $num_valid, $num_invalid, $num_premises,
-        function ($exercise) use($no_superfluous, $must_be_relevant) {
+        function ($exercise) use($no_superfluous_premises_allowed, $must_be_relevant, $premise_conjunction_must_be_contingent) {
             if ($no_superfluous_premises_allowed && has_superfluous_premises($exercise))
                 return false;
 
             if ($must_be_relevant && !relevant($exercise['premises'], $exercise['conclusion']))
+                return false;
+
+            if ($premise_conjunction_must_be_contingent && !list_contingency($exercise['premises']))
                 return false;
 
             return true;
