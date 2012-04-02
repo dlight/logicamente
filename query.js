@@ -29,14 +29,18 @@ function form_value() {
     };
 }
 
-
+function select(nome) {
+    $('#side .tab').hide();
+    $('#side .tab#c_' + nome).show();
+    $('#menu .selected').removeClass('selected');
+    $('#menu #' + nome).addClass('selected');
+}
 
 $(document).ready(function () {
-    $("a#send").hover(function (ev) {
-        $(this).toggleClass('hover');
-    });
 
     $("a#send").click(function (ev) {
+        $('a#send').toggle();
+
         console.log(form_value());
 
         $.ajax({
@@ -49,14 +53,23 @@ $(document).ready(function () {
                 alert("Erro ao enviar os dados: " + status);
             },
             success: function(data) {
-                console.log($('#results'));
-                $('#results').show().html('<pre>' + JSON.stringify(data, null, 4));
+                console.log($('#c_detalhes'));
+                $('#c_detalhes').show().html('<pre>' + JSON.stringify(data, null, 4));
                 console.log(data);
+                $('a#send').toggle();
+                $('#menu').show();
+                $('#menu #exerc').trigger('click');
             }
         });
     });
 
+    $('form input').bind('change blur', function () {
+        $('textarea[name="codigo"]').val(JSON.stringify(form_value(), null, 4));
+    });
 
+    $('#side a').bind('click', function(ev) {
+        select(this.id);
+    });
 
     $('input[name=num_exercises]')
         .bind('blur', function (ev) {

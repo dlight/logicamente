@@ -91,10 +91,21 @@
         </div>
         <div class="row">
           <div class="cell"><div class="name"></div></div>
-          <div class="cell"><div class="block"><a id="send">Enviar</a></div></div>
+          <div class="cell"><div class="block hover"><a id="send">Enviar</a></div></div>
         </div>
       </div>
     </form>
-    <div id="results" class="result"></div>
+    <div id="side">
+      <div id="menu" style="display: none">
+        <a id="codigo" class="click hover">Código</a>
+        <a id="exerc" class="click hover">Exercícios</a>
+        <a id="detalhes" class="click hover">Detalhes</a>
+      </div>
+      <div id="c_codigo" class="tab">
+        <textarea name="codigo"></textarea>
+      </div>
+      <div id="c_exerc" class="tab"  style="display: none"></div>
+      <div id="c_detalhes" class="tab"  style="display: none"></div>
+    </div>
   </body>
 </html>
