@@ -120,9 +120,7 @@ function gen($params) {
     return $exercises;
 }
 
-follows(array('a', 'b', 'c'), 'a');
-
-$x = superfluous('c', array('a', 'b', 'c'), '(c|b)');
+set_time_limit(0);
 
 
 $handle = fopen('php://input','r');
