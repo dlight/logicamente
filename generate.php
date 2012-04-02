@@ -65,9 +65,12 @@ function superfluous($p, $premises, $conclusion) {
     return follows($premises_without_p, $conclusion);
 }
 
-function has_superfluous_premises($premises, $conclusion) {
-    foreach($premises as $p)
-        if (superfluous($p, $premises, $conclusion))
+function has_superfluous_premises($exercise) {
+    if (!$exercise['is_valid'])
+        return false;
+
+    foreach($exercise['premises'] as $p)
+        if (superfluous($p, $exercise['premises'], $exercise['conclusion']))
             return true;
 
     return false;
@@ -85,7 +88,7 @@ function new_exercise($num_premises, $new_formula) {
     return $exercise;
 }
 
-function generate_exercises($num_valid, $num_invalid, $num_premises, $exercise_is_not_fit, $new_formula) {
+function generate_exercises($num_valid, $num_invalid, $num_premises, $exercise_is_fit, $new_formula) {
     $valid = array();
     $invalid = array();
     $discarded_valid = array();
@@ -96,7 +99,7 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $exercise_i
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
         $exercise = new_exercise($num_premises, $new_formula);
 
-        while ($exercise_is_not_fit($exercise)) {
+        while (!$exercise_is_fit($exercise)) {
             array_push($discarded_not_fit, $exercise);
             $exercise = new_exercise($num_premises, $new_formula);
         }
@@ -174,14 +177,19 @@ function gen($params) {
     $fgenerator = new FormulaGenerator($conectives, $atoms);
 
     $compl_min = intval($params['compl_min']);
-    $compl_min = intval($params['compl_max']);
+    $compl_max = intval($params['compl_max']);
 
 
 
     return generate_exercises(
         $num_valid, $num_invalid, $num_premises,
-        function ($exercise) {
-            return false;
+        function ($exercise) use($no_superfluous) {
+            //die('Debug: ' . var_dump(has_superfluous_premises($exercise)));
+
+            if ($no_superfluous && has_superfluous_premises($exercise))
+                return false;
+
+            return true;
         },
         function () use ($fgenerator, $compl_min, $compl_max) {
             $complex = rand($compl_min, $compl_max);

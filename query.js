@@ -23,7 +23,7 @@ function form_value() {
         atoms: read_atoms('atoms'),
         compl_min: read_num('compl_min'),
         compl_max: read_num('compl_max'),
-        num_premises: read_num('compl_min'),
+        num_premises: read_num('num_premises'),
         conectives: checked('conectives'),
         restrictions: checked('restrictions')
     };
