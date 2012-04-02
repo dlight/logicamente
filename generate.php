@@ -124,23 +124,25 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $exercise_i
         }
     }
 
-    $res = array('valid' => $valid,
-                 'invalid' => $invalid,
-                 'discarded_valid' => $discarded_valid,
-                 'discarded_invalid' => $discarded_invalid,
-                 'discarded_not_fit' => $discarded_not_fit,
-                 'num_gen_valid' => count($valid),
-                 'num_gen_invalid' => count($invalid),
-                 'num_discarded_valid' => count($discarded_valid),
-                 'num_discarded_invalid' => count($discarded_invalid),
-                 'num_discarded_not_fit' => count($discarded_not_fit),
-                 'num_req_valid' => $num_valid,
-                 'num_req_invalid' => $num_invalid);
+    $exercises = array('valid' => $valid,
+                       'invalid' => $invalid,
+                       'discarded_valid' => $discarded_valid,
+                       'discarded_invalid' => $discarded_invalid,
+                       'discarded_not_fit' => $discarded_not_fit);
 
-    $res['num_gen'] = $res['num_gen_valid'] + $res['num_gen_invalid'];
-    $res['num_discarded'] = $res['num_discarded_valid'] + $res['num_discarded_invalid'] + $res['num_discarded_not_fit'];
-    $res['num_req'] = $res['num_req_valid'] + $res['num_req_invalid'];
-    return $res;
+    $stats = array('num_gen_valid' => count($valid),
+                   'num_gen_invalid' => count($invalid),
+                   'num_discarded_valid' => count($discarded_valid),
+                   'num_discarded_invalid' => count($discarded_invalid),
+                   'num_discarded_not_fit' => count($discarded_not_fit),
+                   'num_req_valid' => $num_valid,
+                   'num_req_invalid' => $num_invalid);
+
+    $stats['num_gen'] = $res['num_gen_valid'] + $res['num_gen_invalid'];
+    $stats['num_discarded'] = $res['num_discarded_valid'] + $res['num_discarded_invalid'] + $res['num_discarded_not_fit'];
+    $stats['num_req'] = $res['num_req_valid'] + $res['num_req_invalid'];
+
+    return array('exercises' => $exercises, 'stats' => $stats);
 }
 
 function gen($params) {
@@ -231,18 +233,20 @@ $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);
 $decoded = json_decode($jsonInput,true);
 
-
-$json = array();
-$json['request'] = $decoded;
-
 $time_a = microtime(true);
 
-$json['exercises'] = gen($decoded);
+$ex = gen($decoded);
 
 $time_b = microtime(true);
 
-$json['time'] = array('total' => $time_b - $time_a);
+$response = array();
 
-die(json_encode($json));
+$response['exercises'] = $ex['exercises'];
+$response['stats'] = $ex['stats'];
+$response['request'] = $decoded;
+
+$response['time'] = $time_b - $time_a;
+
+die(json_encode($response));
 
 ?>
