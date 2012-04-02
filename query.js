@@ -157,7 +157,7 @@ $(document).ready(function () {
             },
             success: function(data) {
                 $('#c_detalhes').show().html('<pre>' + JSON.stringify(data, null, 4));
-		$('#c_exerc').show().html('<pre>' + JSON.stringify(combine(data), null, 4));
+		$('#c_exerc').show().html('<pre>' + JSON.stringify(combine(data)));
 
 		test = data;
 
