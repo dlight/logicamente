@@ -86,10 +86,12 @@ function semantic(atoms, ex, n) {
     console.log(r);
 
     console.log('risos');
+    console.log(r.join(' /\\ '));
     console.log(ex.conclusion);
     console.log(proofweb(ex.conclusion));
+    
 
-    var p = ' ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion);
+    var p = ' ( ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion) + ' ) ';
 
     console.log(p);
 
