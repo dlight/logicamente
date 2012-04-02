@@ -1,5 +1,5 @@
 var students = [
-	"Aluno 1", "Aluno 2"
+	"username1", "username2"
 ];
 
 var num_students = students.length;

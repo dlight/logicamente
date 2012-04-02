@@ -29,6 +29,109 @@ function form_value() {
     };
 }
 
+function proofweb(e) {
+    return e.replace(/&/g, "/\\").replace(/\|/g, "\\/").replace(/!/g, "~");
+}
+
+function natural_ded(atoms, ex, n) {
+
+    var m = ["Require Import ProofWeb.",
+	     "(* TEMPLATE DA TEORIA DE DEDUÇÃO NATURAL: *)",
+	     "Parameter "].join('\n\n');
+
+    m += atoms.join(' ');
+
+    m += ": Prop.\n\n";
+
+    var k = 0;
+
+    for(i in ex.premises) {
+	m += "Hypothesis P" + k + " : ";
+	m += proofweb(ex.premises[i]) + ".\n\n";
+	k = k + 1;
+    }
+
+    m += "Theorem T" + n + " : " + proofweb(ex.conclusion) + ".\n\n";
+
+    m += ["Proof.",
+	  "(* Prova aqui *)",
+	  "Qed."].join("\n\n");
+
+    return m;
+}
+
+function semantic(atoms, ex, n) {
+
+    var m = ["Require Import Semantics.",
+	    "(* Exemplo de VERIFICAÇÂO DE UM CONTRA-MODELO: *)",
+	     "Parameter "].join('\n\n');
+
+    m += atoms.join(' ');
+
+    m += ": Prop.\n\n";
+
+    var k = 0;
+
+    for(i in atoms) {
+	m += "(* Hypothesis P" + k + " : (v ?? ";
+	m += atoms[i] + "). *)\n\n";
+	k = k + 1;
+    }
+
+    var r = ex.premises.map(function (d) { return proofweb(d); });
+
+    var p = ' ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion);
+
+    m += "Theorem T" + n + " : (v ||-/- " + p + ".\n\n";
+
+    m += ["Proof.",
+	  "(* Prova aqui *)",
+	  "Qed."].join("\n\n");
+
+    return m;
+}
+
+function shuffle(array) {
+    var tmp, current, top = array.length;
+
+    if(top) while(--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+    }
+
+    return array;
+}
+
+function combine(res) {
+    var a = shuffle(res.exercises.valid.concat(res.exercises.invalid));
+
+    console.log(a);
+
+    var r = {};
+
+    $.each(students, function(i, val) {
+	r[val] = { nd: [], sem: [] };
+
+	var l = r[val];
+
+	var j;
+
+	for (j = 0; j < res.request.num_exercises / num_students; j++) {
+	    console.log(i + " " + j);
+	    l.nd[j] = natural_ded(res.request.atoms, a[i*j], j);
+	    l.sem[j] = semantic(res.request.atoms, a[i*j], j);
+	}
+    });
+
+    return r;
+};
+
+
+//console.log(natural_ded(s.request.atoms, s.exercises.valid[0], 0));
+//console.log(semantic(s.request.atoms, s.exercises.valid[0], 0));
+
 function select(nome) {
     $('#side .tab').hide();
     $('#side .tab#c_' + nome).show();
@@ -36,12 +139,12 @@ function select(nome) {
     $('#menu #' + nome).addClass('selected');
 }
 
+var test;
+
 $(document).ready(function () {
 
     $("a#send").click(function (ev) {
         $('a#send').toggle();
-
-        console.log(form_value());
 
         $.ajax({
             url:"generate.php",
@@ -53,9 +156,11 @@ $(document).ready(function () {
                 alert("Erro ao enviar os dados: " + status);
             },
             success: function(data) {
-                console.log($('#c_detalhes'));
                 $('#c_detalhes').show().html('<pre>' + JSON.stringify(data, null, 4));
-                console.log(data);
+		$('#c_exerc').show().html('<pre>' + JSON.stringify(combine(data), null, 4));
+
+		test = data;
+
                 $('a#send').toggle();
                 $('#menu').show();
                 $('#menu #exerc').trigger('click');
