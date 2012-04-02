@@ -56,7 +56,7 @@ function natural_ded(atoms, ex, n) {
 
     m += ["Proof.",
 	  "(* Prova aqui *)",
-	  "Qed."].join("\n\n");
+	  "Qed.\n"].join("\n\n");
 
     return m;
 }
@@ -83,11 +83,11 @@ function semantic(atoms, ex, n) {
 
     var p = ' ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion);
 
-    m += "Theorem T" + n + " : (v ||-/- " + p + ".)\n\n";
+    m += "Theorem T" + n + " : (v ||-/- " + p + ").\n\n";
 
     m += ["Proof.",
 	  "(* Prova aqui *)",
-	  "Qed."].join("\n\n");
+	  "Qed.\n"].join("\n\n");
 
     return m;
 }
