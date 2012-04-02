@@ -20,6 +20,43 @@ function follows($premises, $conclusion) {
     return ! sat($s);
 }
 
+function relevant($premises, $conclusion) {
+	$premise_atoms = array();
+	$conclusion_atoms = array();
+	$count=0;
+	$pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
+	
+	preg_match_all($pattern, $conclusion, $conclusion_atoms);
+	foreach ($premises as $key => $p ) {
+		preg_match_all($pattern, $p, $premise_atoms);
+		
+		foreach ($premise_atoms as $p_atom) {
+			if (in_array($p_atom, $conclusion_atoms)) {
+				$count++;
+			}
+		}
+	}
+	if ($count < sizeof($premises)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+
+function contingency($formula) {
+    return (boolean) sat($formula) && (! valid($formula));
+ }
+
+
+function valid($formula) {
+    $formula = escapeshellarg($formula);
+    $output = `echo $formula | ./limboole`;
+    return preg_match('/^% VALID/', $output) >= 1; 
+}
+
+
+
 function superfluous($p, $premises, $conclusion) {
     $premises_without_p = array_filter($premises, function ($q) use ($p) {
 	    return $q !== $p;
@@ -54,7 +91,11 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $new_formul
 
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
 	$exercise = new_exercise($num_premises, $new_formula);
-
+	/*
+	while (!relevant($exercise['premises'], $exercise['conclusion'])) {
+		$exercise = new_exercise($num_premises, $new_formula);
+	}
+	*/
 	if (follows($exercise['premises'], $exercise['conclusion']))
 	    if(count($valid) < $num_valid) array_push($valid, $exercise);
 	    else array_push($discarded_valid, $exercise);
@@ -83,9 +124,9 @@ function gen($params) {
     $num_valid = $cutoff;
     $num_invalid = $total - $cutoff;
 
-    $compl_min = intval($params['compl_min']);
-    $compl_max = intval($params['compl_max']);
-    $num_premises = intval($params['num_premises']);
+      
+    $num_premises = $params['num_premises'];
+
 
     $conectives = array();
 
@@ -101,14 +142,41 @@ function gen($params) {
 	elseif ($con === 'not')
 	    array_push($conectives, new Connective("!","not","N",1,0));
     }
+	
 
 
-    $fgenerator = new FormulaGenerator($conectives);
 
-    $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator) {
-	   return $fgenerator->generateFormula(rand(2, 6), 4)->toInfixNotation(); 
+	$atoms = array();
+		
+	foreach ($params['atoms'] as $atm) {
+		array_push($atoms, new Atom($atm));
+	}
+	
+    $fgenerator = new FormulaGenerator($conectives, $atoms);
+	
+	$compl_min = intval($params['compl_min']);
+	$compl_min = intval($params['compl_max']);
+
+    
+
+    $exercises = generate_exercises($num_valid, $num_invalid, $num_premises, function () use ($fgenerator, $compl_min, $compl_max) {
+	   $complex = rand($compl_min, $compl_max);
+	   $formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
+	   
+	   /*
+	   $output2 = shell_exec("echo 'complex: ". $complex ."' >> log");
+	   $output2 = shell_exec("echo 'formula: ". $formula ."\n\n' >> log");
+       */    
+
+	   
+	   while (contingency($formula) !=  1):
+			$formula = $fgenerator->generateFormula($complex)->toInfixNotation(); 
+	   endwhile;
+	      
+	   return $formula; 
 	});
-
+	
+	
     $exercises['num_valid'] = count($exercises['valid']);
     $exercises['num_invalid'] = count($exercises['invalid']);
     $exercises['num_total'] = $exercises['num_valid'] + $exercises['num_invalid'];
@@ -121,7 +189,6 @@ function gen($params) {
 }
 
 set_time_limit(0);
-
 
 $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);

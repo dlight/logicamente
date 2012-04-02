@@ -18,7 +18,7 @@ function read_atoms(name) {
 
 function form_value() {
     return {
-	num_exercises: read_num('num_exercises') * 47,
+	num_exercises: read_num('num_exercises') * num_students,
 	num_students: num_students,
 	atoms: read_atoms('atoms'),
 	compl_min: read_num('compl_min'),
@@ -46,7 +46,7 @@ $(document).ready(function () {
 	    dataType: "json",
 	    data: JSON.stringify(form_value()),
 	    error: function(obj, status) {
-		alert("Erro ao enviar os dados: " + status);
+			alert("Erro ao enviar os dados: " + status);
 	    },
 	    success: function(data) {
 		console.log($('#results'));
