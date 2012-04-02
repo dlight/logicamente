@@ -18,6 +18,7 @@ function read_atoms(name) {
 
 function form_value() {
     return {
+	code: $("input[name='code']").val(),
         num_exercises: read_num('num_exercises') * num_students,
         num_students: num_students,
         atoms: read_atoms('atoms'),
@@ -125,7 +126,7 @@ function combine(res) {
 	}
     });
 
-    return r;
+    return { code: res.request.code, data: r };
 };
 
 
@@ -160,7 +161,7 @@ $(document).ready(function () {
     });
 
     $("a#send").click(function (ev) {
-        $('a#send').toggle();
+        $('a#send a#salvar').hide();
 
         $.ajax({
             url:"generate.php",
@@ -173,13 +174,12 @@ $(document).ready(function () {
             },
             success: function(data) {
                 $('#c_detalhes').show().html('<pre>' + JSON.stringify(data, null, 4));
-		$('#c_exerc').show().html('<pre>' + JSON.stringify(combine(data)));
+		$('#c_exerc').show().html('<pre>' + JSON.stringify(combine(data), null, 4));
 
 		test = data;
 
-                $('a#send').toggle();
-                $('#menu').show();
-		$('a#salvar').show();
+                $('a#send a#salvar #menu').show();
+		
                 $('#menu #exerc').trigger('click');
             }
         });

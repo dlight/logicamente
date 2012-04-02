@@ -4,7 +4,9 @@ set_time_limit(0);
 $handle = fopen('php://input','r');
 $jsonInput = fgets($handle);
 
-$decoded = json_decode($jsonInput,true);
+$dec = json_decode($jsonInput,true);
+
+$decoded = $dec['data'];
 
 foreach($decoded as $n => $s) {
     $d = '/opt/p/' . $n;
@@ -12,10 +14,10 @@ foreach($decoded as $n => $s) {
     mkdir($d);
 
     foreach($decoded[$n]['nd'] as $i => $v)
-	file_put_contents($d . '/' . 'avaliacao_' . $i . '_nd.v', $v);
+	file_put_contents($d . '/' . 'avaliacao_' . $dec['code'] . '_' . $i . '_nd.v', $v);
 
     foreach($decoded[$n]['sem'] as $i => $v)
-	file_put_contents($d . '/' . 'avaliacao_' . $i . '_sem.v', $v);
+	file_put_contents($d . '/' . 'avaliacao_' . $dec['code'] . '_' . $i . '_sem.v', $v);
 
 
     //echo('/opt/p/' . $n);
