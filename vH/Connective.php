@@ -18,7 +18,7 @@ class Connective extends Node {
 		$this->children = array();
 	}
 	function toInfixNotation() {
-		if ($this->arity > 2) throw new Exception("Utiliza��o de nota��o infixa para operador com aridade maior que 2: $functional");
+		if ($this->arity > 2) throw new Exception("Utilizacao de notacao infixa para operador com aridade maior que 2: $functional");
 		$result = "( ";
 		if ($this->arity == 1) $result .= $this->infix . " ";
 		$n = 1;
