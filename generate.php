@@ -16,9 +16,42 @@ function sat($formula) {
 }
 
 function follows($premises, $conclusion) {
-	
+	/*
+	 *
+	 * foreach ($params['atoms'] as $atm) {
+		array_push($atoms, new Atom($atm));
+	} 
+	 * 
+	*/
+	foreach ($premises as $atm => $p) {
+		//$output = shell_exec("echo 'Premissa: ". $key ." - ". $atm ."\n' >> log");
+		$output = shell_exec("echo 'Premissa: ". $p."\nIndex: ".$atm."\n' >> log");
+	}
     $s = implode(' & ', $premises) . ' &! ' . $conclusion;
     return ! sat($s);
+}
+
+function relevant($premises, $conclusion) {
+	$premise_atoms = array();
+	$conclusion_atoms = array();
+	$count=0;
+	$pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
+	
+	preg_match_all($pattern, $conclusion, $conclusion_atoms);
+	foreach ($premises as $key => $p ) {
+		preg_match_all($pattern, $p, $premise_atoms);
+		
+		foreach ($premise_atoms as $p_atom) {
+			if (in_array($p_atom, $conclusion_atoms)) {
+				$count++;
+			}
+		}
+	}
+	if ($count < sizeof($premises)) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 
@@ -69,7 +102,11 @@ function generate_exercises($num_valid, $num_invalid, $num_premises, $new_formul
 
     while (count($valid) < $num_valid || count($invalid) < $num_invalid) {
 	$exercise = new_exercise($num_premises, $new_formula);
-
+	/*
+	while (!relevant($exercise['premises'], $exercise['conclusion'])) {
+		$exercise = new_exercise($num_premises, $new_formula);
+	}
+	*/
 	if (follows($exercise['premises'], $exercise['conclusion']))
 	    if(count($valid) < $num_valid) array_push($valid, $exercise);
 	    else array_push($discarded_valid, $exercise);
@@ -161,11 +198,11 @@ function gen($params) {
 
     return $exercises;
 }
-
+/*
 follows(array('a', 'b', 'c'), 'a');
 
 $x = superfluous('c', array('a', 'b', 'c'), '(c|b)');
-
+*/
 /*
 echo '<br/><br/>';
 
