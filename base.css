@@ -108,7 +108,7 @@ input.active, textarea.active {
 input { height: 1.8em; }
 textarea { width: 100%; height: 40em; }
 
-#send
+#send, #salvar
 {
     padding: 0.3em;
     background-color:#CCCCCC;

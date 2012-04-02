@@ -143,6 +143,22 @@ var test;
 
 $(document).ready(function () {
 
+    $("a#salvar").click(function (ev) {
+        $.ajax({
+            url:"write.php",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(combine(test)),
+            error: function(obj, status) {
+                alert("Erro ao salvar: " + status);
+            },
+            success: function(data) {
+		console.log('vejamos?');
+            }
+        });
+    });
+
     $("a#send").click(function (ev) {
         $('a#send').toggle();
 
@@ -163,6 +179,7 @@ $(document).ready(function () {
 
                 $('a#send').toggle();
                 $('#menu').show();
+		$('a#salvar').show();
                 $('#menu #exerc').trigger('click');
             }
         });
