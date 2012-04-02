@@ -37,7 +37,7 @@ function proofweb(e) {
 function natural_ded(atoms, ex, n) {
 
     var m = ["Require Import ProofWeb.",
-	     "(* TEMPLATE DA TEORIA DE DEDUÇÃO NATURAL: *)",
+	     "(* DEMONSTRAR EM DEDUÇÃO NATURAL: *)",
 	     "Parameter "].join('\n\n');
 
     m += atoms.join(' ');
@@ -64,7 +64,7 @@ function natural_ded(atoms, ex, n) {
 function semantic(atoms, ex, n) {
 
     var m = ["Require Import Semantics.",
-	    "(* Exemplo de VERIFICAÇÂO DE UM CONTRA-MODELO: *)",
+	    "(* REFUTAR EM TEORIA SEMÂNTICA: *)",
 	     "Parameter "].join('\n\n');
 
     m += atoms.join(' ');
@@ -83,7 +83,7 @@ function semantic(atoms, ex, n) {
 
     var p = ' ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion);
 
-    m += "Theorem T" + n + " : (v ||-/- " + p + ".\n\n";
+    m += "Theorem T" + n + " : (v ||-/- " + p + ".)\n\n";
 
     m += ["Proof.",
 	  "(* Prova aqui *)",
