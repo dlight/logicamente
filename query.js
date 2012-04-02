@@ -79,9 +79,19 @@ function semantic(atoms, ex, n) {
 	k = k + 1;
     }
 
+    console.log(ex.premises);
+
     var r = ex.premises.map(function (d) { return proofweb(d); });
 
+    console.log(r);
+
+    console.log('risos');
+    console.log(ex.conclusion);
+    console.log(proofweb(ex.conclusion));
+
     var p = ' ( ' + r.join(' /\\ ') + ' ) -> ' + proofweb(ex.conclusion);
+
+    console.log(p);
 
     m += "Theorem T" + n + " : (v ||-/- " + p + ").\n\n";
 
@@ -119,10 +129,12 @@ function combine(res) {
 
 	var j;
 
-	for (j = 0; j < res.request.num_exercises / num_students; j++) {
+	var rte = res.request.num_exercises / num_students;
+
+	for (j = 0; j < rte; j++) {
 	    console.log(i + " " + j);
-	    l.nd[j] = natural_ded(res.request.atoms, a[i*j], j);
-	    l.sem[j] = semantic(res.request.atoms, a[i*j], j);
+	    l.nd[j] = natural_ded(res.request.atoms, a[i * rte + j], j);
+	    l.sem[j] = semantic(res.request.atoms, a[i * rte + j], j);
 	}
     });
 
