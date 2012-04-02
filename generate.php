@@ -20,26 +20,36 @@ function follows($premises, $conclusion) {
 }
 
 function relevant($premises, $conclusion) {
-    $premise_atoms = array();
-    $conclusion_atoms = array();
-    $count=0;
-    $pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
+	$premise_atoms = array();
+	$conclusion_atoms = array();
+	$numRelevPrems=0;
+	$pattern = '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/'; //Regular expression to check a valid "variable name"
+	
+	preg_match_all($pattern, $conclusion, $conclusion_atoms); 
 
-    preg_match_all($pattern, $conclusion, $conclusion_atoms);
-    foreach ($premises as $key => $p ) {
-        preg_match_all($pattern, $p, $premise_atoms);
+	
+	foreach ($premises as $key => $premise ) {
+		$isRelevant=false;
+		
+		preg_match_all($pattern, $premise, $premise_atoms); 
+		
+		foreach ($premise_atoms[0] as $k => $p_atoms) { 
+			
+			if (in_array($p_atoms, $conclusion_atoms[0])) {
+				$isRelevant=true;
+			}	
+		}
+		
+		if ( $isRelevant == true){
+			$numRelevPrems++;
+		}
+	}
 
-        foreach ($premise_atoms as $p_atom) {
-            if (in_array($p_atom, $conclusion_atoms)) {
-                $count++;
-            }
-        }
-    }
-    if ($count < sizeof($premises)) {
-        return false;
-    } else {
-        return true;
-    }
+	if ($numRelevPrems < sizeof($premises)) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 
@@ -186,6 +196,9 @@ function gen($params) {
             //die('Debug: ' . var_dump(has_superfluous_premises($exercise)));
 
             if ($no_superfluous && has_superfluous_premises($exercise))
+                return false;
+
+            if (!relevant($exercise['premises'], $exercise['conclusion']))
                 return false;
 
             return true;
